@@ -34,6 +34,11 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # Allowed hosts configuration
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Add Render domain if running on Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 # Jazzmin Admin Theme Settings
 JAZZMIN_SETTINGS = {
