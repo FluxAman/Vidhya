@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Admission - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 40px;
+        box-shadow: var(--shadow);
+        margin-bottom: 30px;
+        transition: transform 0.3s;
+        border: 1px solid var(--border);
+    }
+
+    .form-section:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .form-section h3 {
+        color: var(--primary);
+        margin-bottom: 25px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        position: relative;
+    }
+
+    .form-section h3::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 60px;
+        height: 2px;
+        background: var(--secondary);
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        /* Slightly more rounded */
+        font-size: 1rem;
+        transition: all 0.2s;
+        background: #fdfdfd;
+    }
+
+    .form-control:hover {
+        border-color: #cbd5e0;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--white);
+        box-shadow: 0 0 0 4px rgba(11, 69, 133, 0.1);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .admission-info {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: var(--white);
+        padding: 40px;
+        border-radius: var(--radius);
+        margin-bottom: 40px;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admission-info::after {
+        content: '\f19d';
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        font-size: 12rem;
+        opacity: 0.1;
+        transform: rotate(-15deg);
+    }
+
+    .admission-info h2 {
+        margin-bottom: 20px;
+        color: var(--white);
+        font-size: 1.8rem;
+    }
+
+    .admission-info ul {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .admission-info li {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.05rem;
+    }
+
+    .admission-info i {
+        color: var(--secondary);
+        font-size: 1.2rem;
+    }
+
+    .alert {
+        padding: 20px;
+        border-radius: var(--radius);
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .form-section {
+            padding: 25px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header animate-on-scroll">
+    <div class="container">
+        <h1>Admission</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Admission</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-gray">
+    <div class="container">
+        <div style="max-width: 900px; margin: 0 auto;">
+
+            <!-- Admission Info Box -->
+            <div class="admission-info animate-on-scroll">
+                <h2><i class="fas fa-graduation-cap"></i> Admissions Open for 2026-27</h2>
+                <p style="margin-bottom: 20px; opacity: 0.9; font-size: 1.1rem;">We are now accepting applications for
+                    the upcoming academic year. Join our family for a bright future.</p>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Nursery to Class 8</li>
+                    <li><i class="fas fa-language"></i> Hindi & English Medium</li>
+                    <li><i class="fas fa-book-reader"></i> NCERT Based Curriculum</li>
+                    <li><i class="fas fa-bed"></i> Hostel Facility Available</li>
+                    <li style="grid-column: 1 / -1;"><i class="fas fa-phone-volume"></i> <strong>Call: 9955632337,
+                            7070323183</strong></li>
+                </ul>
+            </div>
+
+            <!-- Success Message -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success animate-on-scroll">
+                <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                <div>{{ message }}</div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Admission Form -->
+            <form method="post" action="{% url 'admissions:admission' %}" class="animate-on-scroll">
+                {% csrf_token %}
+
+                <!-- Student Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user-graduate"></i> Student Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Student's Full Name *</label>
+                            {{ form.student_name }}
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth *</label>
+                            {{ form.date_of_birth }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gender *</label>
+                            {{ form.gender }}
+                        </div>
+                        <div class="form-group">
+                            <label>Applying for Class *</label>
+                            {{ form.applying_for_class }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Previous School (if any)</label>
+                        {{ form.previous_school }}
+                    </div>
+                </div>
+
+                <!-- Parent Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-users"></i> Parent/Guardian Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Father's Name *</label>
+                            {{ form.father_name }}
+                        </div>
+                        <div class="form-group">
+                            <label>Mother's Name *</label>
+                            {{ form.mother_name }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contact Number *</label>
+                            {{ form.guardian_phone }}
+                        </div>
+                        <div class="form-group">
+                            <label>Alternate Number</label>
+                            {{ form.alternate_phone }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                        <label>Residential Address *</label>
+                        {{ form.address }}
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="form-section">
+                    <h3><i class="fas fa-comment-alt"></i> Additional Information</h3>
+                    <div class="form-group">
+                        <label>Any Message or Query</label>
+                        {{ form.message }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 18px; font-size: 1.1rem; box-shadow: var(--shadow-md);">
+                    <i class="fas fa-paper-plane"></i> Submit Admission Inquiry
+                </button>
+            </form>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

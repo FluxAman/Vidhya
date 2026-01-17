@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if school_info %}{{ school_info.name }}{% else %}Vidya School{% endif %} - Home{% endblock %}
+
+{% block content %}
+<!-- Marquee News Ticker -->
+<div class="marquee-bar">
+    <div class="container">
+        <div class="marquee-content">
+            <span class="marquee-label"><i class="fas fa-bullhorn"></i> Latest News</span>
+            <div class="marquee-text">
+                <span class="marquee-text-inner">
+                    {% if latest_notices %}
+                    {% for notice in latest_notices %}
+                    {{ notice.title }} &nbsp;&nbsp;•&nbsp;&nbsp;
+                    {% endfor %}
+                    {% else %}
+                    Welcome to Vidya Bharti Awasiya Vidyalaya! Admissions Open for Nursery to Class 8. Contact:
+                    9955632337, 7070323183
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Hero Section with Grid Layout - Reference Match -->
+<section class="hero-grid">
+    <!-- Left Sidebar - Notices -->
+    <div class="hero-sidebar">
+        <div class="sidebar-header">
+            Notices
+        </div>
+        <div class="sidebar-content">
+            {% if latest_notices %}
+            {% for notice in latest_notices|slice:":4" %}
+            <a href="{% url 'notices:detail' notice.pk %}" class="notice-item">
+                <div class="notice-date-box">
+                    <span class="day">{{ notice.date_posted|date:"d" }}</span>
+                    <span class="month">{{ notice.date_posted|date:"M" }}</span>
+                </div>
+                <div class="notice-item-title">{{ notice.title|truncatewords:6 }}</div>
+            </a>
+            {% endfor %}
+            {% else %}
+            <div class="notice-item">
+                <div class="notice-item-title">No notices available.</div>
+            </div>
+            {% endif %}
+            <a href="{% url 'notices:list' %}" class="view-all-btn">View All Notices</a>
+        </div>
+    </div>
+
+    <!-- Center - Hero Slider -->
+    <div class="hero-slider" id="heroSlider">
+        {% if banners %}
+        {% for banner in banners %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.heading }}">
+            <div class="hero-overlay">
+                <h2>{{ banner.heading }}</h2>
+                {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% if banners|length > 1 %}
+        <div class="slider-dots">
+            {% for banner in banners %}
+            <span class="slider-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% else %}
+        <!-- Default banner using static images -->
+        <div class="hero-slide active">
+            <img src="{% static 'images/banner1.png' %}" alt="Welcome">
+            <div class="hero-overlay">
+                <!-- Overlay content if needed -->
+            </div>
+        </div>
+        <div class="hero-slide">
+            <img src="{% static 'images/banner2.png' %}" alt="Education">
+        </div>
+        <div class="slider-dots">
+            <span class="slider-dot active" data-index="0"></span>
+            <span class="slider-dot" data-index="1"></span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Sidebar - Achievements/Admissions -->
+    <div class="hero-sidebar">
+        <div class="sidebar-header">
+            Admissions
+        </div>
+        <div class="sidebar-content">
+            <a href="{% url 'admissions:admission' %}" class="notice-item">
+                <div class="notice-item-title">Admission Open for 2026-27</div>
+            </a>
+            <a href="{% url 'admissions:admission' %}" class="notice-item">
+                <div class="notice-item-title">Admission Procedure</div>
+            </a>
+            <a href="{% url 'admissions:admission' %}" class="notice-item">
+                <div class="notice-item-title">Fee Structure</div>
+            </a>
+            <a href="{% url 'results:results' %}" class="notice-item">
+                <div class="notice-item-title">Entrance Result 2026-27</div>
+            </a>
+        </div>
+        <a href="{% url 'admissions:admission' %}" class="view-all-btn">Apply Online</a>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="section section-light animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>Welcome to {% if school_info %}{{ school_info.name }}{% else %}Our School{% endif %}</h2>
+            <p>Dedicated to excellence in education</p>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                {% if school_info %}
+                <p>{{ school_info.about_text|truncatewords:80 }}</p>
+                {% if school_info.established_year %}
+                <p><strong>Established:</strong> {{ school_info.established_year }}</p>
+                {% endif %}
+                {% else %}
+                <p>We are dedicated to providing quality education and nurturing the leaders of tomorrow. Our commitment
+                    to excellence in education has made us a trusted institution for generations. With modern
+                    facilities, experienced faculty, and a comprehensive curriculum, we ensure every student reaches
+                    their full potential.</p>
+                {% endif %}
+                <a href="{% url 'core:about' %}" class="btn btn-primary" style="margin-top: 15px;">Read More <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/banner1.png' %}" alt="School">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Info Cards Section -->
+<section class="section section-gray animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>Why Choose Us</h2>
+            <p>What makes our school special</p>
+        </div>
+        <div class="info-grid">
+            {% if facilities %}
+            {% for facility in facilities %}
+            <div class="info-card">
+                {% if facility.image %}
+                <img src="{{ facility.image.url }}" alt="{{ facility.name }}">
+                {% else %}
+                <div class="info-icon">
+                    <i class="fas {{ facility.icon|default:'fa-building' }}"></i>
+                </div>
+                {% endif %}
+                <h3>{{ facility.name }}</h3>
+                <p>{{ facility.description|truncatewords:20 }}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Default Static Facilities -->
+            <a href="{% url 'academics:academics' %}" class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Quality Education</h3>
+                <p>Comprehensive curriculum designed to develop critical thinking and creativity</p>
+            </a>
+            <a href="{% url 'core:facilities' %}" class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>Experienced Faculty</h3>
+                <p>Dedicated teachers committed to nurturing every student's potential</p>
+            </a>
+            <a href="{% url 'core:facilities' %}" class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3>Modern Facilities</h3>
+                <p>State-of-the-art infrastructure including labs, library, and sports facilities</p>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Latest Notices Section -->
+{% if latest_notices %}
+<section class="section section-light animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>Latest Notices</h2>
+            <p>Stay updated with important announcements</p>
+        </div>
+        <div class="card-grid" style="max-width: 900px; margin: 0 auto;">
+            {% for notice in latest_notices %}
+            <a href="{% url 'notices:detail' notice.pk %}"
+                class="notice-card {% if notice.is_important %}important{% endif %}">
+                <h3 class="notice-title">
+                    {{ notice.title }}
+                    {% if notice.is_important %}<span class="badge">Important</span>{% endif %}
+                </h3>
+                <p class="notice-date"><i class="far fa-calendar-alt"></i> {{ notice.date_posted|date:"F d, Y" }}</p>
+                <p class="notice-content">{{ notice.content|truncatewords:20 }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'notices:list' %}" class="btn btn-outline">View All Notices <i
+                    class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Hero Slider
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+        currentSlide = index;
+    }
+
+    // Auto-advance slides
+    if (slides.length > 1) {
+        setInterval(() => {
+            showSlide((currentSlide + 1) % slides.length);
+        }, 5000);
+    }
+
+    // Dot click handlers
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showSlide(index));
+    });
+</script>
+{% endblock %}

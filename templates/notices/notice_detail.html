@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notice.title }} - Notice{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Notice</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'notices:list' %}">Notices</a>
+            <span>/</span>
+            <span>{{ notice.title|truncatewords:5 }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="notice-card {% if notice.is_important %}important{% endif %}"
+                style="border-left-width: 6px; padding: 30px;">
+                <h2 class="notice-title" style="font-size: 1.5rem; margin-bottom: 10px;">
+                    {{ notice.title }}
+                    {% if notice.is_important %}<span class="badge">Important</span>{% endif %}
+                </h2>
+                <p class="notice-date" style="margin-bottom: 25px; color: var(--gray);">
+                    <i class="far fa-calendar-alt"></i> Posted on {{ notice.date_posted|date:"F d, Y" }}
+                </p>
+                <div class="notice-content" style="font-size: 1rem; line-height: 1.9; color: var(--dark);">
+                    {{ notice.content|linebreaks }}
+                </div>
+
+                {% if notice.attachment %}
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gray-light);">
+                    <a href="{{ notice.attachment.url }}" class="btn btn-primary" download>
+                        <i class="fas fa-download"></i> Download Attachment
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 30px;">
+                <a href="{% url 'notices:list' %}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Notices
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

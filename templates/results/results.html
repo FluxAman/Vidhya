@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Results - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header animate-on-scroll">
+    <div class="container">
+        <h1>Exam Results</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Results</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light animate-on-scroll">
+    <div class="container">
+        <div class="section-title">
+            <h2>Academic Performance</h2>
+            <p>Access and download result sheets by class</p>
+        </div>
+
+        {% if results_by_class %}
+        <div class="results-container" style="max-width: 900px; margin: 0 auto;">
+            {% for class_name, results in results_by_class.items %}
+            <div class="result-class-section animate-on-scroll" style="margin-bottom: 40px;">
+                <h3
+                    style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 15px 25px; border-radius: 12px 12px 0 0; margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow);">
+                    <i class="fas fa-graduation-cap"></i> {{ class_name }}
+                </h3>
+                <div
+                    style="background: var(--white); border-radius: 0 0 12px 12px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); border-top: none;">
+                    {% for result in results %}
+                    <div class="result-item"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid var(--border); transition: background 0.3s;">
+                        <div class="result-info">
+                            <h4 style="color: var(--dark); margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 600;">{{
+                                result.exam_name }}</h4>
+                            <div
+                                style="display: flex; gap: 15px; align-items: center; color: var(--text-muted); font-size: 0.9rem;">
+                                <span><i class="fas fa-calendar-alt" style="color: var(--secondary);"></i> {{
+                                    result.published_date|date:"d M Y" }}</span>
+                                <span
+                                    style="background: var(--primary-light); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 0.5px;">{{
+                                    result.academic_year }}</span>
+                            </div>
+                        </div>
+                        <a href="{{ result.result_pdf.url }}" target="_blank" class="btn btn-primary"
+                            style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 80px 20px; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); max-width: 600px; margin: 0 auto;"
+            class="animate-on-scroll">
+            <div
+                style="width: 80px; height: 80px; background: var(--light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-file-alt" style="font-size: 2.5rem; color: var(--text-muted);"></i>
+            </div>
+            <h3 style="color: var(--dark); margin-bottom: 10px;">No Results Published Yet</h3>
+            <p style="color: var(--text-muted);">Exam results will be published here once they are available. Please
+                check back later.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    .result-item:hover {
+        background-color: var(--light);
+    }
+
+    .result-item:last-child {
+        border-bottom: none;
+    }
+
+    @media (max-width: 600px) {
+        .result-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .result-item .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

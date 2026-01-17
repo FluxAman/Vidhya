@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Academics - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Academics</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Academics</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Classes</h2>
+            <p>Explore our comprehensive academic programs</p>
+        </div>
+
+        {% if classes %}
+        <div class="accordion">
+            {% for class in classes %}
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>{{ class.name }}</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        {% if class.description %}
+                        <p style="margin-bottom: 15px; color: var(--gray);">{{ class.description }}</p>
+                        {% endif %}
+
+                        {% if class.subjects.all %}
+                        <h4 style="margin-bottom: 10px; color: var(--primary);">Subjects:</h4>
+                        <div class="subject-list">
+                            {% for subject in class.subjects.all %}
+                            <span class="subject-tag">{{ subject.name }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p style="color: var(--gray);">Subject details coming soon.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>Academic information coming soon</h3>
+            <p>Class and curriculum details will be added shortly.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleAccordion(header) {
+        const item = header.parentElement;
+        const isActive = item.classList.contains('active');
+
+        // Close all items
+        document.querySelectorAll('.accordion-item').forEach(i => {
+            i.classList.remove('active');
+        });
+
+        // Open clicked item if it wasn't already open
+        if (!isActive) {
+            item.classList.add('active');
+        }
+    }
+
+    // Open first item by default
+    const firstItem = document.querySelector('.accordion-item');
+    if (firstItem) {
+        firstItem.classList.add('active');
+    }
+</script>
+{% endblock %}

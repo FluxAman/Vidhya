@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Welcome{% endblock %}">
+    <title>{% block title %}School{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Header Main -->
+    <div class="header-main">
+        <div class="container">
+            <a href="{% url 'core:home' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Logo">
+                <div class="logo-text">
+                    <span class="school-name">Vidya Bharti Awasiya Vidyalaya</span>
+                    <span class="school-tagline">CBSE Affiliation No. XXXXXXX</span>
+                </div>
+            </a>
+
+            <!-- Contact Widget (Top Right) -->
+            <div class="header-contact-widget">
+                <span>Contact<br>9955632337</span>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+                <a href="#"><i class="fas fa-map-marker-alt"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <button class="nav-toggle" id="navToggle"><span class="hamburger"></span></button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="{% url 'core:home' %}" class="nav-link">Home</a></li>
+                    <li><a href="{% url 'admissions:admission' %}" class="nav-link">Admission</a></li>
+                    <li><a href="{% url 'academics:academics' %}" class="nav-link">Academics</a></li>
+                    <li><a href="{% url 'results:results' %}" class="nav-link">Results</a></li>
+                    <li><a href="{% url 'gallery:gallery' %}" class="nav-link">Gallery</a></li>
+                    <li><a href="{% url 'core:facilities' %}" class="nav-link">Facilities</a></li>
+                    <li><a href="{% url 'core:contact' %}" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>About School</h3>
+                    <p>{% if school_info %}{{ school_info.about_text|truncatewords:30 }}{% else %}Quality education and
+                        holistic development.{% endif %}</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'core:home' %}">Home</a></li>
+                        <li><a href="{% url 'admissions:admission' %}">Admission</a></li>
+                        <li><a href="{% url 'academics:academics' %}">Academics</a></li>
+                        <li><a href="{% url 'results:results' %}">Results</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Explore</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'gallery:gallery' %}">Gallery</a></li>
+                        <li><a href="{% url 'core:facilities' %}">Facilities</a></li>
+                        <li><a href="{% url 'core:contact' %}">Contact</a></li>
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="contact-info">
+                        {% if school_info %}
+                        <li><i class="fas fa-map-marker-alt"></i> {{ school_info.address }}</li>
+                        <li><i class="fas fa-phone"></i> {{ school_info.phone1 }}</li>
+                        {% if school_info.phone2 %}<li><i class="fas fa-phone"></i> {{ school_info.phone2 }}</li>{% endif %}
+                        {% else %}
+                        <li><i class="fas fa-phone"></i> +91-XXXXXXXXXX</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}. All
+                    Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (navToggle) {
+            navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+        }
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Active Link Highlighting
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

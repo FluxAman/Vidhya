@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ album.title }} - Gallery - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{%
+endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ album.title }}</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'gallery:gallery' %}">Gallery</a>
+            <span>/</span>
+            <span>{{ album.title }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        {% if album.description %}
+        <p style="text-align: center; max-width: 600px; margin: 0 auto 40px; color: var(--gray);">
+            {{ album.description }}
+        </p>
+        {% endif %}
+
+        {% if images %}
+        <div class="gallery-grid">
+            {% for image in images %}
+            <div class="gallery-item" onclick="openLightbox('{{ image.image.url }}')">
+                <img src="{{ image.image.url }}" alt="{{ image.title }}">
+                <div class="gallery-overlay">
+                    {% if image.title %}
+                    <span>{{ image.title }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-image"></i>
+            <h3>No images in this album</h3>
+            <p>Images will be added soon.</p>
+        </div>
+        {% endif %}
+
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="{% url 'gallery:gallery' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Gallery
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img src="" alt="Gallery Image" id="lightboxImage">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+
+    function openLightbox(imageUrl) {
+        lightboxImage.src = imageUrl;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Facilities - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Our Facilities</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Facilities</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        {% if facilities %}
+        <div class="card-grid">
+            {% for facility in facilities %}
+            <div class="card">
+                {% if facility.image %}
+                <div class="card-image">
+                    <img src="{{ facility.image.url }}" alt="{{ facility.name }}">
+                </div>
+                {% else %}
+                <div class="card-image"
+                    style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas {{ facility.icon|default:'fa-building' }}" style="font-size: 3rem; color: white;"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ facility.name }}</h3>
+                    <p class="card-text">{{ facility.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-building"></i>
+            <h3>No facilities listed yet</h3>
+            <p>Facility information will be added soon.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

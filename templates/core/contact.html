@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Contact</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-info-list">
+                <h2 style="color: var(--primary); margin-bottom: 30px;">Get in Touch</h2>
+
+                {% if school_info %}
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Address</h4>
+                        <p>{{ school_info.address|linebreaks }}</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Phone</h4>
+                        <p>{{ school_info.phone1 }}</p>
+                        {% if school_info.phone2 %}
+                        <p>{{ school_info.phone2 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if school_info.email %}
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Email</h4>
+                        <p><a href="mailto:{{ school_info.email }}" style="color: var(--primary);">{{ school_info.email
+                                }}</a></p>
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-phone-slash"></i>
+                    <h3>Contact information coming soon</h3>
+                    <p>Please check back later.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="map-container">
+                <div style="text-align: center;">
+                    <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Map will be displayed here</p>
+                    <p style="font-size: 0.9rem;">You can embed a Google Map by editing this template</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

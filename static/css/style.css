@@ -1,0 +1,895 @@
+/* ===== CSS Variables - Premium School Theme ===== */
+:root {
+    /* Refined Color Palette */
+    /* Refined Color Palette - Reference Match */
+    --primary: #003366;
+    /* Deep Navy Blue */
+    --primary-light: #1a4d80;
+    --primary-dark: #002244;
+
+    --secondary: #F47920;
+    /* Vibrant Orange */
+    --secondary-light: #ff9d57;
+    --secondary-dark: #d6600a;
+
+    --accent: #F47920;
+    /* Matching Orange for accents */
+
+    /* Neutrals */
+    --dark: #2d3436;
+    --text-muted: #636e72;
+    --light: #f8f9fa;
+    --white: #ffffff;
+    --border: #e9ecef;
+
+    /* Shadows & Effects */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-bloom: 0 10px 40px rgba(11, 69, 133, 0.2);
+
+    --radius: 12px;
+    --radius-sm: 6px;
+    --radius-full: 50px;
+
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Reset & Base ===== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--dark);
+    background: var(--light);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===== Typography ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--primary-dark);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ===== Layout Utilities ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== Components ===== */
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(11, 69, 133, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(11, 69, 133, 0.4);
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-dark);
+    transform: translateY(-2px);
+}
+
+/* Cards */
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===== Header ===== */
+.top-bar {
+    background: var(--primary-dark);
+    color: var(--white);
+    padding: 10px 0;
+    font-size: 0.9rem;
+}
+
+.top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-main {
+    background: var(--white);
+    padding: 0;
+    position: relative;
+    z-index: 10;
+    box-shadow: none;
+    border-bottom: 5px solid var(--secondary);
+}
+
+.header-main .container {
+    background: transparent;
+    padding: 10px 20px;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo img {
+    height: 90px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.logo-text {
+    font-family: 'Times New Roman', serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-text .school-name {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary);
+    background: none;
+    -webkit-text-fill-color: var(--primary);
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+}
+
+.logo-text .school-tagline {
+    font-size: 0.95rem;
+    color: var(--dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Contact Widget (Top Right) */
+.header-contact-widget {
+    background: var(--secondary);
+    color: var(--white);
+    padding: 10px 30px 10px 50px;
+    border-bottom-left-radius: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-weight: 600;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-contact-widget i {
+    background: var(--white);
+    color: var(--secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+/* Navbar Update */
+.header {
+    background: var(--primary);
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 18px 25px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: block;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+
+/* Marquee */
+.marquee-bar {
+    background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: var(--white);
+    padding: 12px 0;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.marquee-label {
+    background: var(--secondary);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hero Section - Reference Redesign */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    min-height: 500px;
+    gap: 0;
+    background: var(--white);
+    box-shadow: none;
+}
+
+/* Sidebar Container */
+.hero-sidebar {
+    background: var(--light);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+}
+
+.sidebar-header {
+    background: var(--secondary);
+    color: var(--white);
+    padding: 15px 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 0;
+    box-shadow: none;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    background: var(--white);
+}
+
+/* Notice Item in Sidebar - List Style */
+.notice-item {
+    padding: 15px 20px;
+    background: var(--white);
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: flex-start;
+    transition: var(--transition);
+    margin-bottom: 0;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notice-item:hover {
+    transform: none;
+    box-shadow: inset 3px 0 0 var(--secondary);
+    background: #fffcf8;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.notice-date-box {
+    background: transparent;
+    color: var(--dark);
+    padding: 0;
+    border-radius: 0;
+    text-align: center;
+    min-width: 50px;
+    margin-right: 15px;
+    box-shadow: none;
+}
+
+.notice-date-box .day {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: block;
+    line-height: 0.9;
+    color: var(--dark);
+}
+
+.notice-date-box .month {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.notice-item-title {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #444;
+    line-height: 1.5;
+    flex: 1;
+    margin-top: 2px;
+}
+
+/* Specific styling for Admission Sidebar (Right) */
+.hero-sidebar:last-child .notice-item {
+    align-items: center;
+    padding: 18px 20px;
+}
+
+.hero-sidebar:last-child .notice-date-box {
+    display: none;
+    /* Hide date box for admission links */
+}
+
+.hero-sidebar:last-child .notice-item::before {
+    content: '\f1d8';
+    /* FontAwesome Paper Plane or Arrow */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--secondary);
+    /* Blue arrows */
+    margin-right: 15px;
+    font-size: 1.1rem;
+}
+
+.view-all-btn {
+    display: block;
+    background: var(--primary);
+    color: var(--white);
+    text-align: center;
+    padding: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-top: auto;
+}
+
+.view-all-btn:hover {
+    background: var(--primary-dark);
+}
+
+/* Slider */
+.hero-slider {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    padding: 80px 40px 40px;
+    color: var(--white);
+}
+
+.hero-overlay h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--white);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-overlay p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Sections */
+.section {
+    padding: 80px 0;
+}
+
+.section-light {
+    background: var(--white);
+}
+
+.section-gray {
+    background: var(--light);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.section-title p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* About Section */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+}
+
+.about-image img {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    border: 5px solid var(--white);
+}
+
+/* Info Cards */
+/* Info Cards - Modern Clean Style */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.info-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    /* Soft shadow */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Fix squashed icons */
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.info-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    margin-bottom: 0;
+    /* Flush with content */
+    border-radius: 0;
+    /* Full width image */
+    align-self: stretch;
+}
+
+
+
+/* Card Content Padding */
+.info-card h3 {
+    margin: 20px 20px 10px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.info-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 20px 25px;
+}
+
+/* Fallback Icon Style (Soft & Clean) */
+.info-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 51, 102, 0.06);
+    /* Very soft primary tint */
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 30px auto 10px;
+    transition: var(--transition);
+}
+
+.info-card:hover .info-icon {
+    background: var(--primary);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.info-card h3 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.info-card p {
+    color: var(--text-muted);
+}
+
+/* Footer */
+.footer {
+    background: var(--primary-dark);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 80px 0 30px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer h3 {
+    color: var(--white);
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+    border-left: 3px solid var(--secondary);
+    padding-left: 15px;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    transition: padding-left 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--white);
+    padding-left: 5px;
+}
+
+.contact-info li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.contact-info i {
+    color: var(--secondary);
+    margin-top: 5px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+/* Result & Admission Polish */
+.page-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: var(--white);
+    padding: 60px 0;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    margin-bottom: 40px;
+}
+
+.page-header h1 {
+    color: var(--white);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.breadcrumb {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+}
+
+.breadcrumb a {
+    color: var(--white);
+    font-weight: 500;
+}
+
+/* Responsive */
+/* Responsive */
+@media (max-width: 900px) {
+
+    /* Header Responsiveness */
+    .header-main {
+        border-bottom: none;
+        /* Reference has blue navbar acting as border */
+        padding: 5px 0;
+    }
+
+    .header-main .container {
+        flex-direction: row;
+        /* Keep side-by-side */
+        height: auto;
+        padding: 10px 15px;
+        gap: 15px;
+        align-items: center;
+        text-align: left;
+        justify-content: flex-start;
+    }
+
+    .header-contact-widget {
+        display: none;
+        /* Hidden on mobile as per reference */
+    }
+
+    .logo {
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .logo img {
+        height: 60px;
+        /* Smaller logo */
+    }
+
+    .logo-text {
+        align-items: flex-start;
+        /* Left align text */
+    }
+
+    .logo-text .school-name {
+        font-size: 1.5rem;
+        text-align: left;
+        line-height: 1.2;
+    }
+
+    .logo-text .school-tagline {
+        font-size: 0.75rem;
+        margin-top: 2px;
+    }
+
+    /* Hero Responsiveness */
+    .hero-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Order: Notices (1) -> Slider (2) -> Admissions (3) */
+    .hero-sidebar:first-child {
+        order: 1;
+        display: flex;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .hero-slider {
+        order: 2;
+        min-height: 200px;
+        max-height: 250px;
+    }
+
+    .hero-sidebar:last-child {
+        order: 3;
+        display: flex;
+    }
+
+    /* Facilities Grid Responsive */
+    .info-grid {
+        grid-template-columns: 1fr;
+        /* Stack cards on mobile */
+        gap: 20px;
+    }
+
+    .info-card {
+        padding: 30px 20px;
+    }
+
+    /* Navbar Mobile */
+    .header {
+        height: 50px;
+        /* Fixed height for navbar bar */
+    }
+
+    .nav-toggle {
+        display: block;
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        /* Vertically center in blue bar */
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--primary-dark);
+        flex-direction: column;
+        padding: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: clip-path 0.4s ease-in-out;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.active {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        padding: 10px 0;
+    }
+
+    .nav-link {
+        padding: 12px 20px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Hide day/month box on mobile to match "list" look more closely? 
+       Reference shows separate date box. My code has it. Keep it. 
+       Reference has: Date Box (28 SEP) | Divider line | Title
+       My code: Date Box | Title. 
+       Let's keep my Date Box it looks good. */
+}

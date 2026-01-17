@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Photo Gallery</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Gallery</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        {% if albums %}
+        <div class="card-grid">
+            {% for album in albums %}
+            <a href="{% url 'gallery:album_detail' album.pk %}" class="card">
+                <div class="card-image">
+                    {% if album.cover_image %}
+                    <img src="{{ album.cover_image.url }}" alt="{{ album.title }}">
+                    {% elif album.images.first %}
+                    <img src="{{ album.images.first.image.url }}" alt="{{ album.title }}">
+                    {% else %}
+                    <div
+                        style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-images" style="font-size: 3rem; color: white;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ album.title }}</h3>
+                    {% if album.description %}
+                    <p class="card-text">{{ album.description|truncatewords:15 }}</p>
+                    {% endif %}
+                    <div class="card-meta">
+                        <span><i class="fas fa-images"></i> {{ album.image_count }} photos</span>
+                        <span><i class="far fa-calendar"></i> {{ album.created_at|date:"M Y" }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-images"></i>
+            <h3>No albums yet</h3>
+            <p>Photo albums will be added soon.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

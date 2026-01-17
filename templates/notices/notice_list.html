@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Notices - {% if school_info %}{{ school_info.name }}{% else %}School{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Notices & Announcements</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            <span>Notices</span>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light">
+    <div class="container">
+        {% if notices %}
+        <div style="max-width: 800px; margin: 0 auto;">
+            {% for notice in notices %}
+            <a href="{% url 'notices:detail' notice.pk %}"
+                class="notice-card {% if notice.is_important %}important{% endif %}"
+                style="display: block; margin-bottom: 20px;">
+                <h3 class="notice-title">
+                    {{ notice.title }}
+                    {% if notice.is_important %}<span class="badge">Important</span>{% endif %}
+                </h3>
+                <p class="notice-date"><i class="far fa-calendar-alt"></i> {{ notice.date_posted|date:"F d, Y" }}</p>
+                <p class="notice-content">{{ notice.content|truncatewords:30 }}</p>
+                {% if notice.attachment %}
+                <p style="margin-top: 10px;"><i class="fas fa-paperclip"></i> Attachment available</p>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-bullhorn"></i>
+            <h3>No notices available</h3>
+            <p>Check back later for important announcements.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
