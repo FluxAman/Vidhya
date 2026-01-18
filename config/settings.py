@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv()
@@ -172,59 +171,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# Use DATABASE_URL if available (production), otherwise use SQLite (development)
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
-
-def parse_database_url(url):
-    """
-    Manually parse PostgreSQL URL to handle special characters in password.
-    Format: postgresql://user:password@host:port/database
-    """
-    import re
-    # Pattern to extract parts - handles special chars in password
-    # postgresql://user:password@host:port/dbname
-    pattern = r'^postgres(?:ql)?://([^:]+):(.+)@([^:/@]+):?(\d+)?/(.+)$'
-    match = re.match(pattern, url)
-    if match:
-        user, password, host, port, dbname = match.groups()
-        return {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': dbname,
-            'USER': user,
-            'PASSWORD': password,
-            'HOST': host,
-            'PORT': port or '5432',
-            'CONN_MAX_AGE': 600,
-        }
-    return None
-
-if DATABASE_URL:
-    # First try our manual parser (handles special chars better)
-    db_config = parse_database_url(DATABASE_URL)
-    if db_config:
-        DATABASES = {'default': db_config}
-    else:
-        # Fallback to dj_database_url
-        try:
-            DATABASES = {
-                'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-            }
-        except Exception as e:
-            print(f"Warning: Could not parse DATABASE_URL: {e}")
-            print(f"DATABASE_URL value: {DATABASE_URL[:50]}...")
-            DATABASES = {
-                'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR / 'db.sqlite3',
-                }
-            }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
 
 
 # Password validation
