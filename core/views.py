@@ -1,6 +1,12 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from .models import Banner, SchoolInfo, Facility
 from notices.models import Notice
+
+
+def health_check(request):
+    """Simple healthcheck endpoint that doesn't require database access."""
+    return JsonResponse({'status': 'healthy'}, status=200)
 
 
 def home_view(request):
