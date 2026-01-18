@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-in-pro
 DEBUG = True
 
 # Allowed hosts configuration
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,vidhya-7buy.onrender.com,.onrender.com,.railway.app').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,vidhya-7buy.onrender.com,.onrender.com,.railway.app,.up.railway.app,web-production-9cc9.up.railway.app').split(',')
 
 # Add Render domain if running on Render
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
