@@ -173,47 +173,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Use DATABASE_URL if available (production), otherwise use SQLite (development)
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 if DATABASE_URL:
     try:
         DATABASES = {
-            'default': dj_database_url.config(default=DATABASE_URL)
+            'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
         }
     except Exception as e:
-        # If DATABASE_URL parsing fails due to special characters, try to fix it
-        import urllib.parse
-        from urllib.parse import urlparse, urlunparse
-        
-        try:
-            # Parse the URL and re-encode password if it has special characters
-            parsed = urlparse(DATABASE_URL)
-            if parsed.password:
-                # URL-encode the password
-                encoded_password = urllib.parse.quote(parsed.password, safe='')
-                # Reconstruct the netloc with encoded password
-                if parsed.username:
-                    netloc = f"{parsed.username}:{encoded_password}@{parsed.hostname}"
-                else:
-                    netloc = f":{encoded_password}@{parsed.hostname}"
-                if parsed.port:
-                    netloc += f":{parsed.port}"
-                # Reconstruct the URL
-                fixed_url = urlunparse((parsed.scheme, netloc, parsed.path, 
-                                       parsed.params, parsed.query, parsed.fragment))
-                DATABASES = {
-                    'default': dj_database_url.parse(fixed_url, conn_max_age=600)
-                }
-            else:
-                raise e
-        except Exception:
-            # Last resort: print error and use SQLite
-            print(f"Warning: Could not parse DATABASE_URL: {e}")
-            DATABASES = {
-                'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR / 'db.sqlite3',
-                }
+        print(f"Warning: Could not parse DATABASE_URL: {e}")
+        print(f"DATABASE_URL value: {DATABASE_URL[:50]}...")  # Debug: show first 50 chars
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
             }
+        }
 else:
     DATABASES = {
         'default': {
