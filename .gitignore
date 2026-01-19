@@ -1,5 +1,7 @@
 # Environment files
 .env
+.env.local
+.env.*.local
 
 # Python
 __pycache__/
@@ -10,11 +12,15 @@ __pycache__/
 *.egg-info/
 .installed.cfg
 *.egg
+venv/
+env/
+ENV/
 
 # Django
 *.log
 local_settings.py
 db.sqlite3
+*.sqlite3
 media/
 
 # Static files (collected)
@@ -29,3 +35,12 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
+
+# Vercel
+.vercel
+.vercel_build_output/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/

@@ -1,0 +1,34 @@
+# Development files
+.env
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database
+db.sqlite3
+*.sqlite3
+
+# Media files (handled by Cloudinary)
+media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.git/
+
+# Other deployment configs
+Procfile
+railway.toml
+render.yaml
+build.sh
+start.sh
+
+# Testing
+*.log
