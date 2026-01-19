@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200, initial-scale=1.0, user-scalable=yes">
     <meta name="description" content="{% block meta_description %}Welcome{% endblock %}">
     <title>{% block title %}School{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,7 +88,8 @@
                         {% if school_info %}
                         <li><i class="fas fa-map-marker-alt"></i> {{ school_info.address }}</li>
                         <li><i class="fas fa-phone"></i> {{ school_info.phone1 }}</li>
-                        {% if school_info.phone2 %}<li><i class="fas fa-phone"></i> {{ school_info.phone2 }}</li>{% endif %}
+                        {% if school_info.phone2 %}<li><i class="fas fa-phone"></i> {{ school_info.phone2 }}</li>{%
+                        endif %}
                         {% else %}
                         <li><i class="fas fa-phone"></i> +91-XXXXXXXXXX</li>
                         {% endif %}
