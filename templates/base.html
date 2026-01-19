@@ -88,8 +88,7 @@
                         {% if school_info %}
                         <li><i class="fas fa-map-marker-alt"></i> {{ school_info.address }}</li>
                         <li><i class="fas fa-phone"></i> {{ school_info.phone1 }}</li>
-                        {% if school_info.phone2 %}<li><i class="fas fa-phone"></i> {{ school_info.phone2 }}</li>{%
-                        endif %}
+                        {% if school_info.phone2 %}<li><i class="fas fa-phone"></i> {{ school_info.phone2 }}</li>{% endif %}
                         {% else %}
                         <li><i class="fas fa-phone"></i> +91-XXXXXXXXXX</li>
                         {% endif %}
