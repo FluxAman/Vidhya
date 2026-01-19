@@ -259,30 +259,52 @@ if not DEBUG:
 # MEDIA FILES (User Uploads) - Cloudinary
 # ============================================
 
+# Always use Cloudinary in production (Vercel has read-only filesystem)
+# Check if we're on Vercel
+IS_VERCEL = os.environ.get('VERCEL') == '1' or os.environ.get('VERCEL_ENV') is not None
+
 # Check if Cloudinary is configured
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET')
+
 CLOUDINARY_CONFIGURED = all([
-    os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    os.environ.get('CLOUDINARY_API_KEY'),
-    os.environ.get('CLOUDINARY_API_SECRET'),
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET,
 ])
 
+# Debug logging (remove after confirming it works)
+if IS_VERCEL:
+    print(f"🔍 Vercel detected! Cloudinary configured: {CLOUDINARY_CONFIGURED}")
+    if not CLOUDINARY_CONFIGURED:
+        print(f"⚠️  Missing Cloudinary vars - Cloud Name: {bool(CLOUDINARY_CLOUD_NAME)}, API Key: {bool(CLOUDINARY_API_KEY)}, API Secret: {bool(CLOUDINARY_API_SECRET)}")
+
 if CLOUDINARY_CONFIGURED:
-    # Use Cloudinary for media file storage in production
+    # Use Cloudinary for media file storage
     import cloudinary
     import cloudinary.uploader
     import cloudinary.api
 
     cloudinary.config(
-        cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        api_key=os.environ.get('CLOUDINARY_API_KEY'),
-        api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
         secure=True
     )
 
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     MEDIA_URL = '/media/'  # Cloudinary will handle the actual URL
+    print("✅ Cloudinary storage configured successfully!")
+elif IS_VERCEL:
+    # On Vercel without Cloudinary - ERROR! This won't work!
+    # Set a safe fallback but uploads will fail
+    print("❌ ERROR: Running on Vercel without Cloudinary! Image uploads will FAIL!")
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = '/tmp/media'  # Use /tmp as last resort (files disappear on restart)
 else:
-    # Fall back to local file storage for development
+    # Local development - use local file storage
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 
