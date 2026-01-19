@@ -62,7 +62,12 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
     'https://*.trycloudflare.com',
     'https://*.vercel.app',
+    'https://vidya-chi.vercel.app',  # Specific Vercel domain
 ]
+
+# Add current Vercel URL to CSRF trusted origins if available
+if VERCEL_URL:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{VERCEL_URL}')
 
 # Jazzmin Admin Theme Settings
 JAZZMIN_SETTINGS = {
