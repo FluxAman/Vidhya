@@ -4,10 +4,13 @@ from .models import Album, GalleryImage
 
 
 class GalleryImageInline(admin.TabularInline):
+    """Inline form to add multiple images to an album at once."""
     model = GalleryImage
-    extra = 3
+    extra = 5  # Show 5 empty slots for new images
     fields = ('image', 'title', 'preview')
     readonly_fields = ('preview',)
+    verbose_name = "Gallery Image"
+    verbose_name_plural = "📷 Gallery Images (Upload Multiple)"
     
     def preview(self, obj):
         if obj.image:
@@ -18,6 +21,7 @@ class GalleryImageInline(admin.TabularInline):
 
 @admin.register(Album)
 class AlbumAdmin(admin.ModelAdmin):
+    """Admin interface for managing photo albums."""
     list_display = ('title', 'cover_preview', 'image_count', 'is_active', 'order', 'created_at')
     list_filter = ('is_active', 'created_at')
     list_editable = ('is_active', 'order')
@@ -26,12 +30,13 @@ class AlbumAdmin(admin.ModelAdmin):
     inlines = [GalleryImageInline]
     
     fieldsets = (
-        ('📸 Album Details', {
+        ('📸 Album Information', {
             'fields': ('title', 'description', 'cover_image'),
-            'description': 'Create a photo album with a title and cover image.'
+            'description': 'Create album and upload multiple images at once. Cover image is optional.'
         }),
-        ('⚙️ Settings', {
+        ('⚙️ Display Settings', {
             'fields': ('is_active', 'order'),
+            'description': 'Control visibility and order on website.',
             'classes': ('collapse',)
         }),
     )
@@ -45,10 +50,18 @@ class AlbumAdmin(admin.ModelAdmin):
 
 @admin.register(GalleryImage)
 class GalleryImageAdmin(admin.ModelAdmin):
+    """Admin interface for individual gallery images."""
     list_display = ('title', 'preview', 'album', 'uploaded_at')
     list_filter = ('album', 'uploaded_at')
     search_fields = ('title', 'album__title')
     ordering = ('-uploaded_at',)
+    
+    fieldsets = (
+        ('📷 Image Upload', {
+            'fields': ('album', 'image', 'title'),
+            'description': 'Upload single image. Tip: Use Albums to upload multiple images at once!'
+        }),
+    )
     
     def preview(self, obj):
         if obj.image:

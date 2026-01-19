@@ -1,10 +1,23 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django import forms
 from .models import Notice
+
+
+class NoticeAdminForm(forms.ModelForm):
+    """Custom form for Notice with better widgets."""
+    class Meta:
+        model = Notice
+        fields = '__all__'
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 12, 'cols': 100, 'style': 'width: 100%;'}),
+        }
 
 
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):
+    """Admin interface for managing school notices."""
+    form = NoticeAdminForm
     list_display = ('title', 'date_posted', 'status_badge', 'is_important', 'has_attachment')
     list_filter = ('is_active', 'is_important', 'date_posted')
     list_editable = ('is_important',)
@@ -13,18 +26,22 @@ class NoticeAdmin(admin.ModelAdmin):
     ordering = ('-date_posted',)
     
     fieldsets = (
-        ('📢 Notice Content', {
+        ('📢 Notice Details', {
             'fields': ('title', 'content'),
-            'description': 'Enter the notice title and detailed content.'
+            'description': 'Enter notice title and detailed content.'
         }),
-        ('📎 Attachment', {
+        ('📅 Date & Time', {
+            'fields': ('date_posted',),
+            'description': 'Notice date - leave empty for current date/time or set custom date',
+        }),
+        ('📎 Attachment (Optional)', {
             'fields': ('attachment',),
-            'description': 'Upload PDF or document file if needed.',
+            'description': 'Upload PDF or document file (e.g., exam schedule, circular)',
             'classes': ('collapse',)
         }),
-        ('⚙️ Settings', {
-            'fields': ('date_posted', 'is_active', 'is_important'),
-            'description': 'Control visibility and importance of this notice.'
+        ('⚙️ Display Settings', {
+            'fields': ('is_active', 'is_important'),
+            'description': 'is_active: Show on website | is_important: Highlight notice'
         }),
     )
     
