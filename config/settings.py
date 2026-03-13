@@ -181,6 +181,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.school_info',
             ],
         },
     },
@@ -274,12 +275,6 @@ CLOUDINARY_CONFIGURED = all([
     CLOUDINARY_API_SECRET,
 ])
 
-# Debug logging (remove after confirming it works)
-if IS_VERCEL:
-    print(f"🔍 Vercel detected! Cloudinary configured: {CLOUDINARY_CONFIGURED}")
-    if not CLOUDINARY_CONFIGURED:
-        print(f"⚠️  Missing Cloudinary vars - Cloud Name: {bool(CLOUDINARY_CLOUD_NAME)}, API Key: {bool(CLOUDINARY_API_KEY)}, API Secret: {bool(CLOUDINARY_API_SECRET)}")
-
 if CLOUDINARY_CONFIGURED:
     # Use Cloudinary for media file storage
     import cloudinary
@@ -295,14 +290,11 @@ if CLOUDINARY_CONFIGURED:
 
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     MEDIA_URL = '/media/'  # Cloudinary will handle the actual URL
-    print("✅ Cloudinary storage configured successfully!")
 elif IS_VERCEL:
-    # On Vercel without Cloudinary - ERROR! This won't work!
-    # Set a safe fallback but uploads will fail
-    print("❌ ERROR: Running on Vercel without Cloudinary! Image uploads will FAIL!")
+    # On Vercel without Cloudinary configured – uploads will not work.
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = '/tmp/media'  # Use /tmp as last resort (files disappear on restart)
+    MEDIA_ROOT = '/tmp/media'  # /tmp is the only writable path on Vercel (ephemeral)
 else:
     # Local development - use local file storage
     MEDIA_URL = '/media/'

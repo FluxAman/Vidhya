@@ -14,10 +14,8 @@ def home_view(request):
     banners = Banner.objects.filter(is_active=True)
     latest_notices = Notice.objects.filter(is_active=True)[:5]
     school_info = SchoolInfo.objects.first()
-    
+
     context = {
-        'banners': banners,
-        'banner_list': banners,  # Renamed to avoid potential conflict with built-ins if any
         'banners': banners,
         'latest_notices': latest_notices,
         'facilities': Facility.objects.filter(is_active=True).order_by('order'),
@@ -41,4 +39,5 @@ def contact_view(request):
 def facilities_view(request):
     """Page displaying all school facilities."""
     facilities = Facility.objects.filter(is_active=True)
-    return render(request, 'core/facilities.html', {'facilities': facilities})
+    school_info = SchoolInfo.objects.first()
+    return render(request, 'core/facilities.html', {'facilities': facilities, 'school_info': school_info})
