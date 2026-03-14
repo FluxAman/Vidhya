@@ -3,7 +3,8 @@ Vercel serverless entrypoint for Django.
 
 This file:
 1. Runs database migrations automatically on the first cold-start
-2. Exposes the Django WSGI application as the Vercel handler
+2. Ensures admin superuser always has the correct password
+3. Exposes the Django WSGI application as the Vercel handler
 """
 
 import os
@@ -30,19 +31,29 @@ def run_migrations():
         except Exception as exc:
             print(f"[Vercel] Migration warning: {exc}", file=sys.stderr)
 
-        # Auto-create superuser via ORM if not already exists
+        # Always ensure admin superuser exists with the correct password.
+        # Uses get_or_create + set_password so that even if a broken user
+        # was created by a previous failed deployment, it gets fixed.
         try:
             from django.contrib.auth import get_user_model
             User = get_user_model()
-            if not User.objects.filter(username='admin').exists():
-                User.objects.create_superuser(
-                    username='admin',
-                    email='admin@vidhya.in',
-                    password='Admin@123',
-                )
-                print("[Vercel] Admin superuser created: admin / Admin@123", file=sys.stderr)
+            user, created = User.objects.get_or_create(
+                username='admin',
+                defaults={
+                    'email': 'admin@vidhya.in',
+                    'is_staff': True,
+                    'is_superuser': True,
+                }
+            )
+            # Always reset the password to guarantee login works
+            user.set_password('Admin@123')
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+            action = 'created' if created else 'password-reset'
+            print(f"[Vercel] Admin superuser {action}: admin / Admin@123", file=sys.stderr)
         except Exception as exc:
-            print(f"[Vercel] Superuser creation warning: {exc}", file=sys.stderr)
+            print(f"[Vercel] Superuser warning: {exc}", file=sys.stderr)
 
         _migrations_run = True
 
