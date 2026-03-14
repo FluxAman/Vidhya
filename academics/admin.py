@@ -18,7 +18,7 @@ class StudentInline(admin.TabularInline):
 
 @admin.register(AcademicClass)
 class AcademicClassAdmin(admin.ModelAdmin):
-    list_display = ('name', 'subject_count', 'student_count', 'order')
+    list_display = ('name', 'student_count', 'order')
     list_editable = ('order',)
     search_fields = ('name',)
     ordering = ('order', 'name')
@@ -30,11 +30,6 @@ class AcademicClassAdmin(admin.ModelAdmin):
             'description': 'Add classes from Nursery to Class 8. Use order to arrange display sequence.'
         }),
     )
-
-    def subject_count(self, obj):
-        count = obj.subjects.count()
-        return f"{count} subjects"
-    subject_count.short_description = "Subjects"
 
     def student_count(self, obj):
         count = obj.students.count()
