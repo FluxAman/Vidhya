@@ -12,6 +12,7 @@ class StudentInline(admin.TabularInline):
     model = Student
     extra = 10
     fields = ('roll_number', 'full_name', 'father_name', 'phone', 'admission_date', 'is_active')
+    readonly_fields = ('roll_number',)
     ordering = ('roll_number',)
 
 

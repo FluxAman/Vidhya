@@ -46,7 +46,11 @@ class Student(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=15)
     admission_date = models.DateField()
-    roll_number = models.PositiveIntegerField(help_text='Roll number within the class')
+    roll_number = models.PositiveIntegerField(
+        help_text='Roll number within the class',
+        blank=True,
+        null=True,
+    )
     is_active = models.BooleanField(default=True, help_text='Currently studying in this school')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -58,3 +62,16 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.academic_class.name})"
+
+    def save(self, *args, **kwargs):
+        # Auto-assign next roll number within the class if not set
+        if self.roll_number is None and self.academic_class_id:
+            last_roll = (
+                Student.objects
+                .filter(academic_class_id=self.academic_class_id)
+                .order_by('-roll_number')
+                .values_list('roll_number', flat=True)
+                .first()
+            )
+            self.roll_number = (last_roll or 0) + 1
+        super().save(*args, **kwargs)
