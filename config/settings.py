@@ -76,10 +76,12 @@ JAZZMIN_SETTINGS = {
     "site_brand": "School Admin",
     "welcome_sign": "Welcome to School Admin Panel",
     "copyright": "Vidya Bharti Awasiya Vidyalaya",
-    "search_model": ["notices.Notice", "gallery.Album"],
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
         {"name": "View Site", "url": "/", "new_window": True},
+        {"name": "Inquiries", "url": "admin:admissions_admissioninquiry_changelist", "icon": "fas fa-user-graduate"},
+        {"name": "Notices", "url": "admin:notices_notice_changelist", "icon": "fas fa-bullhorn"},
+        {"name": "Results", "url": "admin:results_examresult_changelist", "icon": "fas fa-file-alt"},
     ],
     "show_sidebar": True,
     "navigation_expanded": True,
@@ -125,7 +127,7 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": True,
-    "theme": "default",
+    "theme": "flatly",
     "button_classes": {
         "primary": "btn-primary",
         "secondary": "btn-secondary",
@@ -204,11 +206,15 @@ if os.environ.get('DATABASE_URL'):
         )
     }
 else:
+    # If we are on Vercel but missing DATABASE_URL, local file writes will fail
+    # because Vercel has a read-only filesystem. Use an in-memory DB so it doesn't crash 500.
+    is_vercel = os.environ.get("VERCEL_ENV") or os.environ.get("VERCEL")
+    
     # SQLite for local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': ':memory:' if is_vercel else BASE_DIR / 'db.sqlite3',
         }
     }
 
