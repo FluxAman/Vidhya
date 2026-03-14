@@ -30,19 +30,17 @@ def run_migrations():
         except Exception as exc:
             print(f"[Vercel] Migration warning: {exc}", file=sys.stderr)
 
-        # Auto-create superuser from environment variables if not already exists
+        # Auto-create superuser via ORM if not already exists
         try:
             from django.contrib.auth import get_user_model
             User = get_user_model()
-            username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin')
-            if not User.objects.filter(username=username).exists():
-                call_command(
-                    'createsuperuser',
-                    '--noinput',
-                    '--username', username,
-                    '--email', os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@vidhya.in'),
-                    verbosity=0,
+            if not User.objects.filter(username='admin').exists():
+                User.objects.create_superuser(
+                    username='admin',
+                    email='admin@vidhya.in',
+                    password='Admin@123',
                 )
+                print("[Vercel] Admin superuser created: admin / Admin@123", file=sys.stderr)
         except Exception as exc:
             print(f"[Vercel] Superuser creation warning: {exc}", file=sys.stderr)
 
