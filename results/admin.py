@@ -11,7 +11,8 @@ class ExamResultAdmin(admin.ModelAdmin):
     search_fields = ('exam_name', 'description')
     date_hierarchy = 'published_date'
     ordering = ('-published_date',)
-    list_per_page = 20
+    list_per_page = 50
+    actions = ['activate_results', 'deactivate_results']
     
     fieldsets = (
         ('📝 Exam Details', {
@@ -36,3 +37,13 @@ class ExamResultAdmin(admin.ModelAdmin):
             )
         return "-"
     download_link.short_description = "PDF"
+
+    def activate_results(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f"{updated} result(s) marked as active.")
+    activate_results.short_description = "Activate selected results"
+
+    def deactivate_results(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f"{updated} result(s) marked as inactive.")
+    deactivate_results.short_description = "Deactivate selected results"

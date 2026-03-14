@@ -20,8 +20,8 @@ class Subject(models.Model):
     """Subjects taught in each class."""
     name = models.CharField(max_length=100)
     academic_class = models.ForeignKey(
-        AcademicClass, 
-        on_delete=models.CASCADE, 
+        AcademicClass,
+        on_delete=models.CASCADE,
         related_name='subjects'
     )
     description = models.TextField(blank=True)
@@ -31,3 +31,30 @@ class Subject(models.Model):
 
     def __str__(self):
         return f'{self.name} ({self.academic_class.name})'
+
+
+class Student(models.Model):
+    """Individual student enrolled in a class (admin only)."""
+    academic_class = models.ForeignKey(
+        AcademicClass,
+        on_delete=models.PROTECT,
+        related_name='students',
+        verbose_name='Class',
+    )
+    full_name = models.CharField(max_length=120)
+    father_name = models.CharField(max_length=120)
+    address = models.TextField()
+    phone = models.CharField(max_length=15)
+    admission_date = models.DateField()
+    roll_number = models.PositiveIntegerField(help_text='Roll number within the class')
+    is_active = models.BooleanField(default=True, help_text='Currently studying in this school')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['academic_class__order', 'academic_class__name', 'roll_number']
+        unique_together = ('academic_class', 'roll_number')
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
+
+    def __str__(self):
+        return f"{self.full_name} ({self.academic_class.name})"

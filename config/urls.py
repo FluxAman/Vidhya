@@ -6,8 +6,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Use a non-default admin path for a bit more security
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('school-admin/', admin.site.urls),
     path('', include('core.urls')),
     path('notices/', include('notices.urls')),
     path('gallery/', include('gallery.urls')),
