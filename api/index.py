@@ -45,13 +45,15 @@ def run_migrations():
                     'is_superuser': True,
                 }
             )
-            # Always reset the password to guarantee login works
+            # Ensure the admin account is active with a known password.
+            # Note: for production, override this via environment and change
+            # the password immediately after first login.
             user.set_password('Admin@123')
             user.is_staff = True
             user.is_superuser = True
             user.save()
             action = 'created' if created else 'password-reset'
-            print(f"[Vercel] Admin superuser {action}: admin / Admin@123", file=sys.stderr)
+            print(f"[Vercel] Admin superuser {action}", file=sys.stderr)
         except Exception as exc:
             print(f"[Vercel] Superuser warning: {exc}", file=sys.stderr)
 
