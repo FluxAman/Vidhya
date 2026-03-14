@@ -807,20 +807,37 @@ h6 {
     /* ── Navbar ── */
     .header {
         position: relative;
-        height: 50px;
+        height: 54px;
+        padding: 0;
+        display: flex;
+        align-items: center;
     }
 
     .nav-toggle {
-        display: block;
+        display: flex;
         position: absolute;
         right: 15px;
         top: 50%;
         transform: translateY(-50%);
+        z-index: 10000;
+        width: 44px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-toggle .hamburger,
+    .nav-toggle .hamburger::before,
+    .nav-toggle .hamburger::after {
+        background: var(--white);
     }
 
     .nav-menu {
         position: absolute;
-        top: 100%;
+        top: 54px;
         left: 0;
         right: 0;
         z-index: 9999;
